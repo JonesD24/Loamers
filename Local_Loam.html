@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 100vh; /* Full screen height */
+        }
+
+        /* Style for the floating legend */
+        .floating-legend {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 5px;
+            padding-top: 5px;
+            border: 2px solid black;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            font-size: 14px;
+            line-height: 1.5;
+            font-family: Arial, sans-serif;
+            z-index: 1000; /* Ensure it floats above the map */
+        }
+
+        .floating-legend h4 {
+        text-align: center; /* Center the title */
+        margin: 0; /* Remove default margins */
+        }
+
+        .legend-symbol {
+            display: inline-block;
+            width: 20px;
+            height: 5px;
+            background: yellow;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <!-- Floating legend -->
+    <div class="floating-legend">
+        <h4>Legend</h4>
+        <div>
+            <span class="legend-symbol"></span> Ribbed for her pleasure
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initialize the map and set its view to Nelson, BC at 1:50,000 scale
+        var map = L.map('map').setView([ 49.610692, -117.183817], 15); // Zoom level 13 approximates 1:50,000 scale
+
+        // Add the default Leaflet basemap (OpenStreetMap tiles)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Add the WMS layer from the BC Government
+        var wmsLayer = L.tileLayer.wms('https://openmaps.gov.bc.ca/geo/pub/WHSE_CADASTRE.PMBC_PARCEL_FABRIC_POLY_SVW/ows?', {
+            layers: 'pub:WHSE_CADASTRE.PMBC_PARCEL_FABRIC_POLY_SVW', // Layer name
+            format: 'image/png', // Image format
+            transparent: true, // Enable transparency
+            attribution: 'Data from <a href="https://openmaps.gov.bc.ca/">BC Government Open Maps</a>'
+        }).addTo(map);
+        
+        // GeoJSON data for the line feature (converted from KML)
+        var lineFeature = {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [[ -117.183502, 49.610495 ], [ -117.183577, 49.610487 ], [ -117.183615, 49.610492 ], [ -117.183645, 49.610475 ], [ -117.183687, 49.610477 ], [ -117.183712, 49.610492 ], [ -117.183732, 49.610507 ], [ -117.183735, 49.610525 ], [ -117.183742, 49.610522 ], [ -117.183768, 49.61054 ], [ -117.18379, 49.610552 ], [ -117.183807, 49.610567 ], [ -117.183827, 49.610582 ], [ -117.183842, 49.610605 ], [ -117.183865, 49.610625 ], [ -117.183882, 49.610642 ], [ -117.183902, 49.610655 ], [ -117.183872, 49.610662 ], [ -117.18384, 49.61067 ], [ -117.183817, 49.610692 ], [ -117.183792, 49.610705 ], [ -117.183792, 49.610728 ], [ -117.183772, 49.610742 ], [ -117.18379, 49.610757 ], [ -117.183777, 49.610772 ], [ -117.183757, 49.610785 ], [ -117.183732, 49.610792 ], [ -117.183725, 49.610822 ], [ -117.183747, 49.61083 ], [ -117.183772, 49.610842 ], [ -117.183787, 49.610852 ], [ -117.183762, 49.610845 ], [ -117.183782, 49.610867 ], [ -117.183802, 49.610882 ], [ -117.183815, 49.610897 ], [ -117.183812, 49.610917 ], [ -117.183815, 49.610937 ], [ -117.183837, 49.61096 ], [ -117.183847, 49.610977 ], [ -117.183852, 49.611002 ], [ -117.183865, 49.61102 ], [ -117.18389, 49.611037 ], [ -117.183912, 49.611052 ], [ -117.183917, 49.611067 ], [ -117.183882, 49.611077 ], [ -117.183835, 49.611097 ], [ -117.183822, 49.611108 ], [ -117.183817, 49.611127 ], [ -117.183817, 49.611152 ], [ -117.183822, 49.611172 ], [ -117.183827, 49.611192 ], [ -117.183797, 49.611242 ], [ -117.1838, 49.611262 ], [ -117.183772, 49.61127 ], [ -117.183772, 49.61129 ], [ -117.183767, 49.61127 ], [ -117.183747, 49.611255 ], [ -117.183722, 49.611245 ], [ -117.18374, 49.611262 ], [ -117.183732, 49.611282 ], [ -117.18369, 49.611262 ], [ -117.183705, 49.611287 ], [ -117.183697, 49.611307 ], [ -117.183722, 49.611317 ], [ -117.183797, 49.611337 ], [ -117.183825, 49.611355 ], [ -117.183842, 49.611372 ], [ -117.183877, 49.611375 ], [ -117.183905, 49.611392 ], [ -117.183912, 49.611407 ], [ -117.183907, 49.61143 ], [ -117.18391, 49.611445 ], [ -117.183897, 49.61146 ], [ -117.18389, 49.611477 ], [ -117.183895, 49.611495 ], [ -117.183907, 49.611515 ], [ -117.183932, 49.611527 ], [ -117.18396, 49.611537 ], [ -117.183977, 49.611547 ], [ -117.183997, 49.611558 ], [ -117.184022, 49.611572 ], [ -117.184042, 49.611587 ], [ -117.184062, 49.611607 ], [ -117.184087, 49.61162 ], [ -117.184095, 49.611597 ], [ -117.184115, 49.611615 ], [ -117.184142, 49.611637 ], [ -117.18417, 49.611637 ], [ -117.184202, 49.61164 ], [ -117.184217, 49.611642 ], [ -117.184218, 49.611665 ], [ -117.184232, 49.61168 ], [ -117.184242, 49.611702 ], [ -117.184232, 49.611717 ], [ -117.184207, 49.611732 ], [ -117.184222, 49.611752 ], [ -117.184242, 49.611767 ], [ -117.184252, 49.611783 ], [ -117.18426, 49.611802 ], [ -117.184272, 49.611825 ], [ -117.184302, 49.611847 ], [ -117.18432, 49.61186 ], [ -117.184337, 49.611875 ], [ -117.184357, 49.611887 ], [ -117.184377, 49.611897 ], [ -117.184407, 49.6119 ], [ -117.184427, 49.611912 ], [ -117.184452, 49.611922 ], [ -117.184462, 49.611937 ], [ -117.184475, 49.611955 ], [ -117.184495, 49.611967 ], [ -117.18452, 49.611977 ], [ -117.184547, 49.611987 ], [ -117.184577, 49.611997 ], [ -117.184602, 49.612012 ]]
+            },
+            "properties": {
+                "name": "Upper Ribbed for her pleasure",
+                "Difficulty": "Gnarly",
+                "length_km": 1.2,
+                "description": "Steep, long, and loamy. Ribbed and pleasurable."
+                }
+        };
+
+        // Add the line feature to the map with styling
+        L.geoJSON(lineFeature, {
+            style: {
+                color: 'yellow', // Line color
+                weight: 2        // Line width
+            },
+            onEachFeature: function (feature, layer) {
+                if (feature.properties) {
+                    // Bind a pop-up to the line feature
+                    layer.bindPopup(
+                        `<b>${feature.properties.name}</b><br>` +
+                        `Difficulty: ${feature.properties.Difficulty}<br>` +
+                        `Length: ${feature.properties.length_km} km<br>` +
+                        `${feature.properties.description}`
+                    );
+                }
+            }
+        }).addTo(map);
+    </script>
+</body>
+</html>
